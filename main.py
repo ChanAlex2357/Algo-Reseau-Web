@@ -27,6 +27,7 @@ def main():
     print(server.stringify());
     print(server2.stringify());
     print(dns.stringify());
+    import gui
 
 def presentation():
     print("# Dans le cadre d'un projet S4 on ce programme permet de faire la simualation d'un reseau de site web \n# ou l'on va essayer d'expliquer l'algorythme de recherche de chemin\n\n");

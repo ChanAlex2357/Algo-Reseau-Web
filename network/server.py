@@ -18,6 +18,7 @@ class Server():
 		self.set_lisaisons(lisaisons);
 		self.set_etat(etat);
 		self.set_dns(dns);
+
 #Getteurs and Setteurs
 	#nom_server
 	def get_nom_server(self):
@@ -64,6 +65,12 @@ class Server():
 
 	def set_etat(self,etat:bool):
 		self._etat=etat
+	
+	def shutdown(self):
+		self.set_etat(False);
+  
+	def start(self):
+		self.set_etat(True);
   
 	#DNS
 	def get_dns(self):
