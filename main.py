@@ -1,14 +1,20 @@
 from network.server import Server
 from network.dns import Dns
 from web.site import Site
+from gui.application import Application 
 def main():
     presentation();
     # Dns
     dns = Dns();
+    server_list = list()
     # Servers
     server = Server("Server 1","192.162.10.1",dns);
     server2 = Server("Server 2","192.162.10.2",dns);
     server3 = Server("Server 3","192.162.10.3",dns);
+    
+    server_list.append(server)
+    server_list.append(server2)
+    server_list.append(server3)
     
 
     # Liaisons
@@ -27,7 +33,10 @@ def main():
     print(server.stringify());
     print(server2.stringify());
     print(dns.stringify());
-    import gui
+    
+    app = Application(servers=server_list)
+    app.run()
+    
 
 def presentation():
     print("# Dans le cadre d'un projet S4 on ce programme permet de faire la simualation d'un reseau de site web \n# ou l'on va essayer d'expliquer l'algorythme de recherche de chemin\n\n");

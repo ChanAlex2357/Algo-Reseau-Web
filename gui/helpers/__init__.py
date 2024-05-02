@@ -8,6 +8,7 @@ def create_form_entry(mst,label,variable):
     form_field_label.pack(side=LEFT,padx=12)
     
     form_input = ttk.Entry(master=form_field_container,textvariable=variable)
+    form_input.setvar(value=variable.get())
     form_input.pack(side=LEFT,padx=5,fill=X,expand=YES)
     return form_input
 

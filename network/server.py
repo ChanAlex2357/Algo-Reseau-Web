@@ -9,8 +9,8 @@ class Server():
      dns:Dns = None
     ):
 		etat:bool = True;
-		lisaisons = list();
-		sites = list();
+		lisaisons = list()
+		sites = list()
 
 		self.set_nom_server(nom_server);
 		self.set_adresse_ip(adresse_ip);
@@ -41,9 +41,18 @@ class Server():
 	def set_sites(self,sites:list):
 		self._sites=sites;
   
-	def add_site(self , site:str):
-		self.get_sites().append(site);
-		self.get_dns().add_site(site,self.get_adresse_ip());
+	def add_site(self , site_domaine:str , content:str = None):
+		for site_web in self.get_sites():
+			if site_web.get_nom_domaine() == site_domaine:
+				return None
+
+		if content == None :
+			content = f"<h1> Hello and welcome on {site_domaine} </h1>"
+
+		site = Site(site_domaine,content)
+		self.get_sites().append(site)
+		self.get_dns().add_site(site,self.get_adresse_ip())
+		return site
 
 
 	#lisaisons
@@ -54,10 +63,21 @@ class Server():
 		self._lisaisons=lisaisons
 
 	def add_liaison(self,server,temps_reponse):
+		liaisons = self.get_lisaisons()
+		ip = server.get_adresse_ip()
+	
+		for li in liaisons:
+			ip1 = li.get_servers()[0].get_adresse_ip()
+			ip2 = li.get_servers()[1].get_adresse_ip()
+			if (ip1 == ip) and (ip2 == self.get_adresse_ip()):
+				return None
+			elif (ip1 == self.get_adresse_ip()) and (ip2 == ip):
+				return None
+  
 		liaison = Liaison((self,server),temps_reponse,True);
-		self.get_lisaisons().append(liaison);
-		server.get_lisaisons().append(liaison);
-
+		liaisons.append(liaison)
+		server.get_lisaisons().append(liaison)
+		return liaison
 
 	#etat
 	def get_etat(self):
@@ -80,15 +100,25 @@ class Server():
 		self._dns=dns
 
 	def stringify(self):
-		string = "Server Name : "+self.get_nom_server()+"\n";
-		string += "Adresse Ip : "+self.get_adresse_ip()+"\n";
-		string += "Actif : "+str(self.get_etat())+"\n";
-		string += "Sites : "+str(self.get_sites())+"\n";
-		string += "Liaisons :";
+		string = "Server Name : "+self.get_nom_server()+"\n"
+		string += "Adresse Ip : "+self.get_adresse_ip()+"\n"
+		string += "Actif : "+str(self.get_etat())+"\n"
+		# Afficher la liste des sites
+		string += "Sites : "
+		for site in self.get_sites():
+			string += "\n\t"+site.stringify()
+		# Afficher la liste des liaisons
+		string += "\nLiaisons :"
 		for li in self.get_lisaisons():
-			string += "\n\t"+li.stringify();
-		return string;
+			string += "\n\t"+li.stringify()
+		return string
 
 	def simple_string(self):
 		string = self.get_nom_server()+" ["+self.get_adresse_ip()+"]("+str(self.get_etat())+")";
 		return string; 
+
+	def set_layout(self , layout):
+		self.layout = layout
+	
+	def get_layout(self):
+		return self.layout

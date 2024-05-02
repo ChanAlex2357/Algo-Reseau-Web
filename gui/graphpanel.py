@@ -1,14 +1,23 @@
 import tkinter as ttk
 from tkinter.constants import *
 from .formulaire.server import ServerFormulaire
+from gui.layout.server import ServerLayout
+from gui.layout.liaison import LiaisonLayout
 
 class GraphPanel(ttk.Frame):
-    def __init__(self,window,dns,servers:list=list()):
-        super().__init__(window,width=1980,)
-        self.pack(side=TOP ,expand=YES,fill=BOTH)
+    def __init__(self,
+                window,
+                dns,
+                servers:list=list(),
+                liaisons:list=list()
+    ):
+        super().__init__(window,width=1980)
+        self.pack(side=LEFT,expand=YES,fill=BOTH)
         self.window = window
         self.servers = servers
         self.dns = dns
+        self.liaisons = liaisons
+
         # Creation du canevas
         self.canevas = self.create_canevas()
 
@@ -23,6 +32,8 @@ class GraphPanel(ttk.Frame):
         canevas.pack(fill=BOTH,expand=YES)
         # Ajouter le listner du canevas pour afficher le menu 
         canevas.bind("<Button-3>",self.pop_menu)
+        from gui.application import Application
+        canevas.bind("<ButtonPress-1>", lambda event: Application.controlpanel.server_detail_panel.release_content())
         return canevas
 
     '''Creation d'un menu de choix d'actions lors d'un clic droit
@@ -38,6 +49,7 @@ class GraphPanel(ttk.Frame):
         func = lambda: self.create_server_formulaire(*params)
         menu.add_command(label="add server", command = func)
         return menu
+
     ''' Afficher le Menu de choix lors d'un clic droit
         Args
             Les donnees de l'evenement
@@ -59,6 +71,18 @@ class GraphPanel(ttk.Frame):
         ServerFormulaire(
             master,
             self,
-            self.servers,
             x,y
         )
+    ''' Ajout d'un server '''
+    def add_server(self,server,x,y):
+        self.servers.append(server)
+        # Creation de la representation du server
+        serverLayout = ServerLayout(self,server,x,y)
+        server.set_layout(serverLayout)
+        from gui.application import Application
+        Application.controlpanel.servers_panel.refresh_servers_tab()
+        
+    def add_liaison(self,liaison):
+        self.liaisons.append(liaison)
+        layout = LiaisonLayout(self,liaison)
+        liaison.set_layout(layout)

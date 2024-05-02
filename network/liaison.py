@@ -27,4 +27,9 @@ class Liaison :
 
 	def stringify(self):
 		string = self.get_servers()[0].simple_string()+" <-- "+self.get_temps_reponse()+" --> "+self.get_servers()[1].simple_string();
-		return string;
+		return string
+	def set_layout(self , layout):
+		self.layout = layout
+	
+	def get_layout(self):
+		return self.layout
