@@ -75,7 +75,6 @@ class LiaisonLayout(GraphLayout):
     def move(self):
         liaison = self.get_liaison()
         canevas = self.canevas
-        self.hilight();
         x1 = liaison.get_servers()[0].get_layout().get_center_x()
         y1 = liaison.get_servers()[0].get_layout().get_center_y()
         x2 = liaison.get_servers()[1].get_layout().get_center_x()

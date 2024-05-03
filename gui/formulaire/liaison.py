@@ -45,4 +45,8 @@ class LiaisonFormulaire(ttk.Frame):
             print ("liaison already exist")
             return
         print(f"{ip1} -- {delay} -- {ip2}")
+        # Ajouter la liaison  dans la liste des liaison de l'application
+        self.graphpanel.liaisons.append(liaison)
+        # Donner la liaison au graph pour etre integrer dans l'affichage
         self.graphpanel.add_liaison(liaison)
+

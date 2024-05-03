@@ -2,6 +2,8 @@ import tkinter as ttk
 from tkinter.constants import *
 from .formulaire.server import ServerFormulaire
 from gui.layout.server import ServerLayout
+
+from .recherche import RecherhePanel
 from gui.layout.liaison import LiaisonLayout
 
 class GraphPanel(ttk.Frame):
@@ -17,9 +19,13 @@ class GraphPanel(ttk.Frame):
         self.servers = servers
         self.dns = dns
         self.liaisons = liaisons
-
+        self.recherhe_panel = RecherhePanel(self)
         # Creation du canevas
         self.canevas = self.create_canevas()
+        
+        # Integrer les servers de base
+        self.integrate_servers(self.servers)
+        self.integrate_liaisons(self.liaisons)
 
     ''' Creation d'un canevas qui sera utiliser pour faire la representation des graphs 
     
@@ -73,16 +79,31 @@ class GraphPanel(ttk.Frame):
             self,
             x,y
         )
-    ''' Ajout d'un server '''
+
+    ''' Ajout d'un server dans le canevas de visualisation
+    '''
     def add_server(self,server,x,y):
-        self.servers.append(server)
         # Creation de la representation du server
         serverLayout = ServerLayout(self,server,x,y)
         server.set_layout(serverLayout)
-        from gui.application import Application
-        Application.controlpanel.servers_panel.refresh_servers_tab()
-        
+
+    '''Ajouter une liaison dans le canevas par son layout
+        Args:
+            liaison a afficher/ajouter dans le canevas
+    '''
     def add_liaison(self,liaison):
-        self.liaisons.append(liaison)
+        # Cree la representaion de la liaison
         layout = LiaisonLayout(self,liaison)
         liaison.set_layout(layout)
+    
+    def integrate_servers(self,servers:list):
+        x = 0 
+        y = 0
+        for server in servers:
+            self.add_server(server,x,y)
+            x += 10
+            y += 10
+    
+    def integrate_liaisons(self,liaisons:list):
+        for liaison in liaisons:
+            self.add_liaison(liaison)

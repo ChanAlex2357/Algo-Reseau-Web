@@ -13,13 +13,11 @@ class ControlPanel(ttk.Frame):
         ):
         super().__init__(master=window)
         self.pack(side=LEFT,fill=BOTH,padx=5,pady=5)
-        
+
         self.dns = dns
         self.servers = servers
         self.liaisons = liaisons
-        
+
         self.dns_panel = DnsPanel(self,dns)
         self.servers_panel = ServersPanel(self,dns,servers)
-        self.recherhe_panel = RecherhePanel(self)
         self.server_detail_panel = ServerDetail(self)
-        

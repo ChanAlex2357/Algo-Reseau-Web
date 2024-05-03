@@ -18,9 +18,9 @@ class Dns :
         adresses_ip = list();
         if domaine in keys:
             adresses_ip = self.get_sites().get(domaine);
-            adresses_ip.append(adresse);
+            adresses_ip.append(adresse)
         else:
-            adresses_ip.append(adresse);
+            adresses_ip.append(adresse)
             self.get_sites().__setitem__(domaine,adresses_ip)
 
     def stringify(self):

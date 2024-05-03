@@ -46,5 +46,8 @@ class SiteFormulaire(ttk.Frame):
             print ("site already exist")
             return
         from gui.application import Application
+        # Afficher les modificaions du servers en cas d'ajout 
         Application.controlpanel.server_detail_panel.update_content(server)
+        # Raafraichir la tableau des sites du DNS
+        Application.controlpanel.dns_panel.refresh_sites_tab()
   

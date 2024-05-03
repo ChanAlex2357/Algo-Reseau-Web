@@ -4,7 +4,7 @@ import gui.helpers as ghelp
 class RecherhePanel(ttk.Frame):
     def __init__(self,window):
         super().__init__(window)
-        self.pack(side=BOTTOM,fill=X,padx=5,pady=5)
+        self.pack(side=TOP,fill=X,padx=5,pady=5)
         domaine = ttk.StringVar(value="")
         self.domaine_entry = ghelp.create_form_entry(self,"Nom domaine : ",domaine)
         

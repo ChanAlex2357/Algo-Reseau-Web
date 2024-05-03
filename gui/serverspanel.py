@@ -10,9 +10,11 @@ class ServersPanel(tk.Frame):
         self.window = window
         self.servers = servers
         self.dns = dns
-        
+        # Creation de l'entete 'Servers'
         self.header = self.create_header()
+        # Creation du tableau des servers a partir de la liste des servers
         self.serverTab = self.create_servers_tree()
+        # Rafrachir le contenu du  tableau
         self.refresh_servers_tab()
     
     def create_header(self):

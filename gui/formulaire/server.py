@@ -36,8 +36,14 @@ class ServerFormulaire(ttk.Frame):
             return
         # Creation de l'objet server
         server = Server(serverName,adresseIp,self.graphpanel.dns)
-        # Ajouter le server au liste des servers
+        # Ajouter le server dans la liste des servers de l'application
+        self.graphpanel.servers.append(server)
+        # Passer le server au graph pour etre afficher dans le canevas
         self.graphpanel.add_server(server,x,y)
+        # Rafraichir la liste des servers dans le tableau de servers panel
+        from gui.application import Application
+        Application.controlpanel.servers_panel.refresh_servers_tab()
+        
 
     '''Verifie si il y a deja ou non un server avec la meme adresse ip
         Args :
