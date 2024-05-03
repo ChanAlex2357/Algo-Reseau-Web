@@ -13,15 +13,19 @@ def main():
     server = Server("Server 1","192.162.10.1",dns);
     server2 = Server("Server 2","192.162.10.2",dns);
     server3 = Server("Server 3","192.162.10.3",dns);
+    server4 = Server("Server 4","192.162.10.4",dns);
     
     server_list.append(server)
     server_list.append(server2)
     server_list.append(server3)
+    server_list.append(server4)
     
 
     # Liaisons
     liaisons.append(server.add_liaison(server2,15));
-    liaisons.append(server.add_liaison(server3,25));
+    liaisons.append(server.add_liaison(server3,5));
+    liaisons.append(server3.add_liaison(server4,5));
+    liaisons.append(server2.add_liaison(server4,5));
 
     # Sites
     server.add_site("www.facebook.com");
@@ -32,9 +36,12 @@ def main():
     server2.add_site("www.facebook.com");
     server2.add_site("www.youtube.com");
 
-    dijkstra.find_short_path(server,server2,server_list)
-    # app = Application(dns,server_list,liaisons)
-    # app.run()
+    server_path = dijkstra.find_short_path(server,server4,server_list)
+    print(server_path)
+    app = Application(dns,server_list,liaisons)
+    server_path.hilight()
+    app.run()
+    
 
 def primary_test():
     # Dns

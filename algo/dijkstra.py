@@ -40,7 +40,29 @@ class Checkout():
 '''Represente le chemin d'accees vers un server a partir d'un checkout final''' 
 class ServerPath():
     def __init__(self,checkout):
-        pass
+        self.server_arrivee = checkout.server
+        self.value = checkout.value
+        self.set_servers_suites(checkout)
+        
+    def __str__(self):
+        string = ""
+        for server in self.servers_suite :
+            string += f"{server.get_adresse_ip()} --> "
+        string += f"|{self.value}|"
+        return string 
+    
+    def set_servers_suites(self,checkout):
+        servers = [checkout.server,]
+        parent = checkout.parent
+        while parent is not None :
+            servers.insert(0,parent.server)
+            self.server_depart = parent
+            parent = parent.parent
+        self.servers_suite = servers 
+
+    def hilight(self):
+        for server in self.servers_suite :
+            server.get_layout().hilight(color="red")
 
 def find_short_path(server_depart , server_arrivee , servers:list ):
     # La liste des checkouts pour 
