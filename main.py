@@ -1,7 +1,8 @@
 from network.server import Server
 from network.dns import Dns
 from web.site import Site
-from gui.application import Application 
+from gui.application import Application
+from algo import dijkstra
 def main():
     presentation()
     # Dns
@@ -19,8 +20,8 @@ def main():
     
 
     # Liaisons
-    liaisons.append(server.add_liaison(server2,"15"));
-    liaisons.append(server.add_liaison(server3,"25"));
+    liaisons.append(server.add_liaison(server2,15));
+    liaisons.append(server.add_liaison(server3,25));
 
     # Sites
     server.add_site("www.facebook.com");
@@ -31,8 +32,9 @@ def main():
     server2.add_site("www.facebook.com");
     server2.add_site("www.youtube.com");
 
-    app = Application(dns,server_list,liaisons)
-    app.run()
+    dijkstra.find_short_path(server,server2,server_list)
+    # app = Application(dns,server_list,liaisons)
+    # app.run()
 
 def primary_test():
     # Dns
