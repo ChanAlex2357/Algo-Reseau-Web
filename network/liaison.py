@@ -26,5 +26,29 @@ class Liaison :
 		self._etat=etat
 
 	def stringify(self):
-		string = self.get_servers()[0].simple_string()+" <-- "+self.get_temps_reponse()+" --> "+self.get_servers()[1].simple_string();
-		return string;
+		string = self.get_servers()[0].simple_string()+" <-- "+self.get_temps_reponse()+" --> "+self.get_servers()[1].simple_string()
+		return string
+	def set_layout(self , layout):
+		self.layout = layout
+	
+	def get_layout(self):
+		return self.layout
+
+	'''Recuperer le server voisin lier par cette liaison
+		ARGS
+			server : le server qui veut connaitre son voisin
+		Return 
+			voisin si le voisin existe 
+   			sinon None quand la source n'appartient pas a cette liaison 
+  	'''
+	def get_server_lier(self,server):
+		#  Considerer le premier server comme voisin
+		voisin = self.get_servers()[0]
+		if voisin.get_adresse_ip() == server.get_adresse_ip():
+			# Prendre le deuxieme server comme voisin
+			voisin = self.get_servers()[1]
+		elif self.get_servers()[1] != server.get_adresse_ip():
+			# On ne peut pas prendre le premier comme voisin 
+   			# si le deuxieme server n'est pas identique a la source donnee
+			voisin = None
+		return voisin
