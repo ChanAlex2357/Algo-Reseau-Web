@@ -23,7 +23,7 @@ def main():
 
     # Liaisons
     liaisons.append(server.add_liaison(server2,1));
-    liaisons.append(server.add_liaison(server3,5));
+    liaisons.append(server.add_liaison(server3,11));
     liaisons.append(server3.add_liaison(server4,5));
     liaisons.append(server2.add_liaison(server4,5));
 
@@ -36,10 +36,7 @@ def main():
     server2.add_site("www.facebook.com");
     server2.add_site("www.youtube.com");
 
-    server_path = dijkstra.find_short_path(server,server4,server_list)
-    print(server_path)
     app = Application(dns,server_list,liaisons)
-    server_path.hilight()
     app.run()
     
 
@@ -69,6 +66,9 @@ def primary_test():
 
     server2.add_site("www.facebook.com");
     server2.add_site("www.youtube.com");
+
+
+
 
 def presentation():
     print("# Dans le cadre d'un projet S4 on ce programme permet de faire la simualation d'un reseau de site web \n# ou l'on va essayer d'expliquer l'algorythme de recherche de chemin\n\n");

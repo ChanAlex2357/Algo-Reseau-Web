@@ -1,8 +1,11 @@
 import tkinter as ttk
 from tkinter.constants import *
+
+import gui.graphpanel
+import gui.layout
 from .formulaire.server import ServerFormulaire
 from gui.layout.server import ServerLayout
-
+import gui
 from .recherche import RecherhePanel
 from gui.layout.liaison import LiaisonLayout
 
@@ -19,13 +22,14 @@ class GraphPanel(ttk.Frame):
         self.servers = servers
         self.dns = dns
         self.liaisons = liaisons
-        self.recherhe_panel = RecherhePanel(self)
+        self.recherhe_panel = RecherhePanel(self,dns)
         # Creation du canevas
         self.canevas = self.create_canevas()
         
         # Integrer les servers de base
         self.integrate_servers(self.servers)
-        self.integrate_liaisons(self.liaisons)
+        self.integrate_liaisons(self.liaisons)servers[0]
+        self.refresh_graphs()
 
     ''' Creation d'un canevas qui sera utiliser pour faire la representation des graphs 
     
@@ -83,6 +87,7 @@ class GraphPanel(ttk.Frame):
     ''' Ajout d'un server dans le canevas de visualisation
     '''
     def add_server(self,server,x,y):
+        self.remove_graph(server) 
         # Creation de la representation du server
         serverLayout = ServerLayout(self,server,x,y)
         server.set_layout(serverLayout)
@@ -92,9 +97,11 @@ class GraphPanel(ttk.Frame):
             liaison a afficher/ajouter dans le canevas
     '''
     def add_liaison(self,liaison):
+        self.remove_graph(liaison)
         # Cree la representaion de la liaison
-        layout = LiaisonLayout(self,liaison)
-        liaison.set_layout(layout)
+        if liaison.get_etat():
+            layout = LiaisonLayout(self,liaison)
+            liaison.set_layout(layout)
     
     def integrate_servers(self,servers:list):
         x = 0 
@@ -107,3 +114,36 @@ class GraphPanel(ttk.Frame):
     def integrate_liaisons(self,liaisons:list):
         for liaison in liaisons:
             self.add_liaison(liaison)
+    def reintegrate_liaisons(self):
+        self.integrate_liaisons(self.liaisons)
+    def reintegrate_servers(self):
+        self.integrate_servers(self.servers)
+
+    def reset_hilight(self):
+        for server in self.servers:
+            server.get_layout().unhilight()
+        for liaison in self.liaisons:
+            liaison.get_layout().unhilight()
+
+    def hilight_on_graph(self,graph,reset=False):
+        if reset :
+            self.reset_hilight()
+        graph.hilight()
+
+    def remove_graph(self,graph_object:gui.layout.GraphLayout):
+        if graph_object.get_layout() is not None:
+
+            graph_object.get_layout().remove_layout()
+
+    def remove_graphs(self):
+        for server in self.servers:
+            self.remove_graph(server)
+        for liaison in self.liaisons:
+            self.remove_graph(liaison)
+
+    def reintegrate_graphs(self):
+        self.reintegrate_servers()
+        self.reintegrate_liaisons()
+
+    def refresh_graphs(self):
+        self.reintegrate_graphs()

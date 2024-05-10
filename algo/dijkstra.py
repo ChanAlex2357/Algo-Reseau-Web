@@ -61,8 +61,17 @@ class ServerPath():
         self.servers_suite = servers 
 
     def hilight(self):
-        for server in self.servers_suite :
+        servers = self.servers_suite
+        for i in range(len(servers)) :
+            server = servers[i]
             server.get_layout().hilight(color="red")
+            try :
+                liaison = server.get_liaison_with(servers[i+1])
+                liaison.get_layout().hilight()
+            except IndexError:
+                pass;
+
+
 
 def find_short_path(server_depart , server_arrivee , servers:list ):
     # La liste des checkouts pour 
@@ -111,6 +120,9 @@ def checkout_traitement(source_checkout,temp_sources:set,checkouts):
     source_server = source_checkout.server
 
     for liaison in source_server.get_lisaisons():
+        # Verifier si la liaison est active
+        if not liaison.get_etat() :
+            continue
         # pour chaque server lier au source on fait son traitement checkout
         server_voisin = liaison.get_server_lier(source_server)
         checkout_voisin = Checkout.get_checkout_of(server_voisin,checkouts)

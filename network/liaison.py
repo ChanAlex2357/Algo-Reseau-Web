@@ -1,8 +1,17 @@
+
 class Liaison :
 	def __init__(self,servers,temps_reponse:int,etat):
 		self.set_servers(servers)
 		self.set_temps_reponse(temps_reponse)
-		self.set_etat(etat)
+		self.set_etat(self.sync_etat())
+		self.layout = None
+
+	def sync_etat(self):
+		etat=True
+		for server in self.get_servers():
+			if not server.get_etat():
+				etat = False
+		return etat
 #Getteurs and Setteurs
 	#servers
 	def get_servers(self):
@@ -41,7 +50,7 @@ class Liaison :
 			voisin si le voisin existe 
    			sinon None quand la source n'appartient pas a cette liaison 
   	'''
-	def get_server_lier(self,server):
+	def get_server_lier(self,server) :
 		#  Considerer le premier server comme voisin
 		voisin = self.get_servers()[0]
 		if voisin.get_adresse_ip() == server.get_adresse_ip():
@@ -52,3 +61,6 @@ class Liaison :
    			# si le deuxieme server n'est pas identique a la source donnee
 			voisin = None
 		return voisin
+	def synch_liaisons(liaisons:list):
+		for liaison in liaisons:
+			liaison.sync_etat()
