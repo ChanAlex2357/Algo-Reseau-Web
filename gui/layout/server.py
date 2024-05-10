@@ -59,21 +59,6 @@ class ServerLayout(GraphLayout):
         self.move(dx,dy)
         self.move_liaisons()
         self.on_press(event)
-        
-        '''Creation d'un menu de choix d'actions lors d'un clic droit
-        Args
-            Les donnees de l'evenement
-        Return 
-            Le menu a afficher en clic droit
-    '''
-    def create_menu(self,x,y):
-        menu = ttk.Menu(self.graphpanel, tearoff=0)
-        params = (x,y)
-        # Creation d'un formulaire pour un server qui sera placer en x,y du clic
-        from gui.application import Application
-        menu.add_command(label="add liaison", command = Application.controlpanel.server_detail_panel.add_liaison)
-        menu.add_command(label="add site", command = Application.controlpanel.server_detail_panel.add_site)
-        return menu
 
     ''' Afficher le Menu de choix lors d'un clic droit
         Args
@@ -82,7 +67,6 @@ class ServerLayout(GraphLayout):
     def pop_menu(self,event):
         x = event.x_root
         y = event.y_root
-        
         from gui.application import Application
         Application.graphpanel.pop_server_menu(x,y,self.get_server())
         

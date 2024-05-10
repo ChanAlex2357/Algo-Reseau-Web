@@ -135,6 +135,8 @@ class GraphPanel(ttk.Frame):
         menu.add_command(label="add site", command = site)
         return menu
     def pop_server_menu(self,x,y,server):
+        if self.server_menu != None:
+            self.server_menu.destroy()
         self.server_menu = self.create_server_menu(server)
         self.server_menu.post(x,y)
 
