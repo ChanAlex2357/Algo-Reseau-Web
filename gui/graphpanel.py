@@ -28,8 +28,7 @@ class GraphPanel(ttk.Frame):
         
         # Integrer les servers de base
         self.integrate_servers(self.servers)
-        self.integrate_liaisons(self.liaisons)servers[0]
-        self.refresh_graphs()
+        self.integrate_liaisons(self.liaisons)
 
     ''' Creation d'un canevas qui sera utiliser pour faire la representation des graphs 
     
@@ -99,7 +98,7 @@ class GraphPanel(ttk.Frame):
     def add_liaison(self,liaison):
         self.remove_graph(liaison)
         # Cree la representaion de la liaison
-        if liaison.get_etat():
+        if liaison.get_etat() :
             layout = LiaisonLayout(self,liaison)
             liaison.set_layout(layout)
     
@@ -121,9 +120,15 @@ class GraphPanel(ttk.Frame):
 
     def reset_hilight(self):
         for server in self.servers:
-            server.get_layout().unhilight()
+            try :
+                server.get_layout().unhilight()
+            except AttributeError:
+                pass;
         for liaison in self.liaisons:
-            liaison.get_layout().unhilight()
+            try :
+                liaison.get_layout().unhilight()
+            except AttributeError:
+                pass;
 
     def hilight_on_graph(self,graph,reset=False):
         if reset :

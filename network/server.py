@@ -103,11 +103,11 @@ class Server():
 	
 	def shutdown(self):
 		self.set_etat(False)
-		Liaison.synch_liaisons(self.get_lisaisons)
+		Liaison.synch_liaisons(self.get_lisaisons())
   
 	def start(self):
 		self.set_etat(True)
-		Liaison.synch_liaisons(self.get_lisaisons)
+		Liaison.synch_liaisons(self.get_lisaisons())
   
 	#DNS
 	def get_dns(self):

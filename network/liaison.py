@@ -11,6 +11,7 @@ class Liaison :
 		for server in self.get_servers():
 			if not server.get_etat():
 				etat = False
+		self.set_etat(etat)
 		return etat
 #Getteurs and Setteurs
 	#servers
@@ -37,6 +38,8 @@ class Liaison :
 	def stringify(self):
 		string = self.get_servers()[0].simple_string()+f" <-- {self.get_temps_reponse()} --> "+self.get_servers()[1].simple_string()
 		return string
+	def __str__(self) -> str:
+		return self.stringify()
 	def set_layout(self , layout):
 		self.layout = layout
 	
