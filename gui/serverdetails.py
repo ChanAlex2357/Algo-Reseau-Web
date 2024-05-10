@@ -44,8 +44,8 @@ class ServerDetail(ttk.Frame):
         self.content.configure(text= server.stringify())
         
     def release_content(self):
-        if self.server_detailed is not None:
-            self.server_detailed.get_layout().unhilight()
+        # if self.server_detailed is not None:
+        #     self.server_detailed.get_layout().unhilight()
         self.server_detailed = None
 
     def create_content(self):

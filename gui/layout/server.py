@@ -46,7 +46,7 @@ class ServerLayout(GraphLayout):
         self.last_y = event.y
         from gui.application import Application
         Application.controlpanel.server_detail_panel.update_content(self.get_server())
-        self.hilight()
+        # self.hilight()
         
     ''' Deplacer la representation graphique du server '''
     def moving(self,event):

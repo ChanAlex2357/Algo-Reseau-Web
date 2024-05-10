@@ -22,7 +22,7 @@ def main():
     
 
     # Liaisons
-    liaisons.append(server.add_liaison(server2,15));
+    liaisons.append(server.add_liaison(server2,1));
     liaisons.append(server.add_liaison(server3,5));
     liaisons.append(server3.add_liaison(server4,5));
     liaisons.append(server2.add_liaison(server4,5));

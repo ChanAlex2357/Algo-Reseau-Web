@@ -1,7 +1,7 @@
 from web.site import Site
 class Dns :
     def __init__(self):
-        sites = dict();
+        sites = dict()
         self.set_sites(sites)
 
 #Getteurs and Setteurs
