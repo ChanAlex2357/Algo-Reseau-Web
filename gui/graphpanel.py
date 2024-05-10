@@ -120,9 +120,15 @@ class GraphPanel(ttk.Frame):
 
     def reset_hilight(self):
         for server in self.servers:
-            server.get_layout().unhilight()
+            try :
+                server.get_layout().unhilight()
+            except AttributeError:
+                pass;
         for liaison in self.liaisons:
-            liaison.get_layout().unhilight()
+            try :
+                liaison.get_layout().unhilight()
+            except AttributeError:
+                pass;
 
     def hilight_on_graph(self,graph,reset=False):
         if reset :

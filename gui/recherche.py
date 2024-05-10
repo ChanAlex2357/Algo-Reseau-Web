@@ -40,6 +40,7 @@ class RecherhePanel(ttk.Frame):
         path = self.search_the_short_path()
         from .application import Application
         Application.graphpanel.hilight_on_graph(path,True)
-
         domaine = self.domaine_entry.get()
-        site = path.server.get_site(domaine)
+        site = path.server_arrivee.get_site(domaine)
+        from gui.layout.site import SiteLayout
+        SiteLayout(site)

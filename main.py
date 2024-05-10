@@ -36,6 +36,7 @@ def main():
     server2.add_site("www.facebook.com");
     server2.add_site("www.youtube.com");
 
+    server4.shutdown()
     app = Application(dns,server_list,liaisons)
     app.run()
     
