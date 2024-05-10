@@ -1,6 +1,8 @@
 import tkinter as ttk
 from tkinter.constants import *
 from .formulaire.server import ServerFormulaire
+from .formulaire.liaison import LiaisonFormulaire
+from .formulaire.site import SiteFormulaire
 from gui.layout.server import ServerLayout
 
 from .recherche import RecherhePanel
@@ -20,6 +22,8 @@ class GraphPanel(ttk.Frame):
         self.dns = dns
         self.liaisons = liaisons
         self.recherhe_panel = RecherhePanel(self)
+        self.menu = None
+        self.server_menu = None
         # Creation du canevas
         self.canevas = self.create_canevas()
         
@@ -63,8 +67,9 @@ class GraphPanel(ttk.Frame):
     def pop_menu(self,event):
         x = event.x_root
         y = event.y_root
-        menu = self.create_menu(x,y)
-        menu.post(x,y)
+        if self.menu == None:
+            self.menu = self.create_menu(x,y)
+        self.menu.post(x,y)
     
     '''Creation d'une fenetre de formulaire pour cree un nouveau server
         Args
@@ -107,3 +112,31 @@ class GraphPanel(ttk.Frame):
     def integrate_liaisons(self,liaisons:list):
         for liaison in liaisons:
             self.add_liaison(liaison)
+
+    def create_liaison_form(self,server):
+        master = ttk.Tk()
+        master.title("Formulaire liaison")
+        from gui.application import Application 
+        LiaisonFormulaire(master, self , server)
+    def create_site_form(self,server):
+        master = ttk.Tk()
+        master.title("Formulaire site")
+        from gui.application import Application 
+        SiteFormulaire(master, self , server)
+
+    def create_server_menu(self,server):
+        menu = ttk.Menu(self, tearoff=0)
+        params = (server)
+        from gui.application import Application
+        liaison = lambda : Application.controlpanel.server_detail_panel.add_liaison(server)
+        site = lambda : Application.controlpanel.server_detail_panel.add_site(server)
+        # Creation d'un formulaire pour un server qui sera placer en x,y du clic
+        menu.add_command(label="add liaison", command = liaison)
+        menu.add_command(label="add site", command = site)
+        return menu
+    def pop_server_menu(self,x,y,server):
+        if self.server_menu != None:
+            self.server_menu.destroy()
+        self.server_menu = self.create_server_menu(server)
+        self.server_menu.post(x,y)
+
