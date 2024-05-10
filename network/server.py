@@ -18,7 +18,8 @@ class Server():
 		self.set_lisaisons(lisaisons);
 		self.set_etat(etat);
 		self.set_dns(dns);
-
+	def __str__(self):
+		return self.stringify()
 #Getteurs and Setteurs
 	#nom_server
 	def get_nom_server(self):
