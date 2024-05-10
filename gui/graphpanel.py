@@ -1,10 +1,13 @@
 import tkinter as ttk
 from tkinter.constants import *
+
+import gui.graphpanel
+import gui.layout
 from .formulaire.server import ServerFormulaire
 from .formulaire.liaison import LiaisonFormulaire
 from .formulaire.site import SiteFormulaire
 from gui.layout.server import ServerLayout
-
+import gui
 from .recherche import RecherhePanel
 from gui.layout.liaison import LiaisonLayout
 
@@ -21,7 +24,7 @@ class GraphPanel(ttk.Frame):
         self.servers = servers
         self.dns = dns
         self.liaisons = liaisons
-        self.recherhe_panel = RecherhePanel(self)
+        self.recherhe_panel = RecherhePanel(self,dns)
         self.menu = None
         self.server_menu = None
         # Creation du canevas
@@ -88,6 +91,7 @@ class GraphPanel(ttk.Frame):
     ''' Ajout d'un server dans le canevas de visualisation
     '''
     def add_server(self,server,x,y):
+        self.remove_graph(server) 
         # Creation de la representation du server
         serverLayout = ServerLayout(self,server,x,y)
         server.set_layout(serverLayout)
@@ -97,9 +101,11 @@ class GraphPanel(ttk.Frame):
             liaison a afficher/ajouter dans le canevas
     '''
     def add_liaison(self,liaison):
+        self.remove_graph(liaison)
         # Cree la representaion de la liaison
-        layout = LiaisonLayout(self,liaison)
-        liaison.set_layout(layout)
+        if liaison.get_etat() :
+            layout = LiaisonLayout(self,liaison)
+            liaison.set_layout(layout)
     
     def integrate_servers(self,servers:list):
         x = 0 
@@ -112,6 +118,45 @@ class GraphPanel(ttk.Frame):
     def integrate_liaisons(self,liaisons:list):
         for liaison in liaisons:
             self.add_liaison(liaison)
+    def reintegrate_liaisons(self):
+        self.integrate_liaisons(self.liaisons)
+    def reintegrate_servers(self):
+        self.integrate_servers(self.servers)
+
+    def reset_hilight(self):
+        for server in self.servers:
+            try :
+                server.get_layout().unhilight()
+            except AttributeError:
+                pass;
+        for liaison in self.liaisons:
+            try :
+                liaison.get_layout().unhilight()
+            except AttributeError:
+                pass;
+
+    def hilight_on_graph(self,graph,reset=False):
+        if reset :
+            self.reset_hilight()
+        graph.hilight()
+
+    def remove_graph(self,graph_object:gui.layout.GraphLayout):
+        if graph_object.get_layout() is not None:
+
+            graph_object.get_layout().remove_layout()
+
+    def remove_graphs(self):
+        for server in self.servers:
+            self.remove_graph(server)
+        for liaison in self.liaisons:
+            self.remove_graph(liaison)
+
+    def reintegrate_graphs(self):
+        self.reintegrate_servers()
+        self.reintegrate_liaisons()
+
+    def refresh_graphs(self):
+        self.reintegrate_graphs()
 
     def create_liaison_form(self,server):
         master = ttk.Tk()

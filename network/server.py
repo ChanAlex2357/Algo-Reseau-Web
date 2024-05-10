@@ -18,6 +18,7 @@ class Server():
 		self.set_lisaisons(lisaisons);
 		self.set_etat(etat);
 		self.set_dns(dns);
+		self.layout = None
 	def __str__(self):
 		return self.stringify()
 #Getteurs and Setteurs
@@ -38,6 +39,12 @@ class Server():
 	#sites
 	def get_sites(self):
 		return self._sites;
+
+	def get_site(self,domaine:str):
+		for site in self.get_sites():
+			if site.get_nom_domaine() == domaine :
+				return site
+		return None
 
 	def set_sites(self,sites:list):
 		self._sites=sites;
@@ -62,6 +69,13 @@ class Server():
 
 	def set_lisaisons(self,lisaisons:list):
 		self._lisaisons=lisaisons
+
+	def get_liaison_with(self,server):
+		for liaison in self.get_lisaisons():
+			voisin = liaison.get_server_lier(self)
+			if server.is_the_same(voisin):
+				return liaison
+		return None
 
 	def add_liaison(self,server,temps_reponse):
 		liaisons = self.get_lisaisons()
@@ -88,10 +102,12 @@ class Server():
 		self._etat=etat
 	
 	def shutdown(self):
-		self.set_etat(False);
+		self.set_etat(False)
+		Liaison.synch_liaisons(self.get_lisaisons())
   
 	def start(self):
-		self.set_etat(True);
+		self.set_etat(True)
+		Liaison.synch_liaisons(self.get_lisaisons())
   
 	#DNS
 	def get_dns(self):
@@ -123,3 +139,6 @@ class Server():
 	
 	def get_layout(self):
 		return self.layout
+	
+	def is_the_same(self,server):
+		return self.get_adresse_ip() == server.get_adresse_ip()

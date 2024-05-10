@@ -39,7 +39,9 @@ class CircleValue():
         
         canevas.coords(self.circle,x1,y1,x2,y2)
         canevas.coords(self.textvalue,self.x,self.y)
-
+    def remove_layout(self):
+        self.canevas.delete(self.textvalue)
+        self.canevas.delete(self.circle)
 class LiaisonLayout(GraphLayout):
     def __init__(self,graphpanel,liaison:Liaison):
         self.canevas = graphpanel.canevas
@@ -85,3 +87,7 @@ class LiaisonLayout(GraphLayout):
         self.canevas.itemconfig(self.geometrie,fill=color)
     def unhilight(self):
         self.canevas.itemconfig(self.geometrie,fill="black")
+
+    def remove_layout(self):
+        super().remove_layout()
+        self.circle_value.remove_layout()

@@ -42,5 +42,7 @@ class GraphLayout():
         newx = self.get_x() + dx
         newy = self.get_y() + dy
         self.set_location(newx,newy)
+    def remove_layout(self):
+        self.canevas.delete(self.geometrie)
     
         

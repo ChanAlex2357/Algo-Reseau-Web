@@ -9,6 +9,20 @@ class ServerLayout(GraphLayout):
         self.canevas = graphpanel.canevas
         self.graphpanel = graphpanel
         # Creation d'un rectangle representant le server
+        geom = self.set_layout_id(server,x,y)
+        
+        super().__init__(
+            server,
+            self.canevas,
+            geom,
+            x,
+            y,
+            ServerLayout.SERVER_WIDTH,
+            ServerLayout.SERVER_HEIGHT
+        )
+        self.move_events()
+
+    def set_layout_id(self,server,x,y):
         geom = self.canevas.create_rectangle(
             x,
             y,
@@ -23,17 +37,7 @@ class ServerLayout(GraphLayout):
             fill="black",
             font=("Helvetica",10)
         )
-        super().__init__(
-            server,
-            self.canevas,
-            geom,
-            x,
-            y,
-            ServerLayout.SERVER_WIDTH,
-            ServerLayout.SERVER_HEIGHT
-        )
-        self.move_events()
-
+        return geom
     def set_server(self,server):
         self.object = server
     def get_server(self):
@@ -72,10 +76,17 @@ class ServerLayout(GraphLayout):
         
     def move_liaisons(self):
         for liaison in self.get_server().get_lisaisons():
-            layout  = liaison.get_layout()
-            layout.move()
+            try :
+                layout  = liaison.get_layout()
+                layout.move()
+            except Exception:
+                pass
             
     def hilight(self,color="black"):
         self.canevas.itemconfig(self.geometrie,outline=color)
     def unhilight(self):
         self.canevas.itemconfig(self.geometrie,outline="")
+
+    def remove_layout(self):
+        super().remove_layout()
+        self.canevas.delete(self.float_text)
