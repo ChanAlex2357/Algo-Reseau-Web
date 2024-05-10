@@ -25,18 +25,18 @@ class ServerDetail(ttk.Frame):
         self.add_liaison_btn = ttk.Button(frame,text="ajouter liaison",command=self.add_liaison)
         self.add_liaison_btn.pack(side=LEFT)
 
-    def add_site(self):
-        master = tk.Tk()
-        master.title("Formulaire site")
+    def add_site(self,server = None ):
+        if server == None:
+            server = self.server_detailed
         from gui.application import Application 
-        SiteFormulaire(master, Application.graphpanel , self.server_detailed)
+        Application.graphpanel.create_site_form(server)
         
         
-    def add_liaison(self):
-        master = tk.Tk()
-        master.title("Formulaire liaison")
+    def add_liaison(self,server = None):
+        if server == None:
+            server = self.server_detailed
         from gui.application import Application 
-        LiaisonFormulaire(master, Application.graphpanel , self.server_detailed)
+        Application.graphpanel.create_liaison_form(server)
     
     def update_content(self,server):
         self.release_content()
