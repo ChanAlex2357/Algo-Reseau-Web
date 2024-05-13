@@ -73,6 +73,9 @@ class GraphPanel(ttk.Frame):
         if self.menu == None:
             self.menu = self.create_menu(x,y)
         self.menu.post(x,y)
+    def unpop_menu(self):
+        self.canevas.dtag(self.menu)
+        self.menu = None 
     
     '''Creation d'une fenetre de formulaire pour cree un nouveau server
         Args
@@ -135,15 +138,19 @@ class GraphPanel(ttk.Frame):
             except AttributeError:
                 pass;
 
-    def hilight_on_graph(self,graph,reset=False):
+    def hilight_on_graph(self,graph,color="red",reset=False):
         if reset :
             self.reset_hilight()
-        graph.hilight()
+        graph.hilight(color)
 
     def remove_graph(self,graph_object:gui.layout.GraphLayout):
+        coords = list
         if graph_object.get_layout() is not None:
-
+            # coords.append( graph_object.get_x())
+            # coords.append( graph_object.get_y())
             graph_object.get_layout().remove_layout()
+        return coords
+
 
     def remove_graphs(self):
         for server in self.servers:
@@ -163,6 +170,7 @@ class GraphPanel(ttk.Frame):
         master.title("Formulaire liaison")
         from gui.application import Application 
         LiaisonFormulaire(master, self , server)
+
     def create_site_form(self,server):
         master = ttk.Tk()
         master.title("Formulaire site")
@@ -175,13 +183,25 @@ class GraphPanel(ttk.Frame):
         from gui.application import Application
         liaison = lambda : Application.controlpanel.server_detail_panel.add_liaison(server)
         site = lambda : Application.controlpanel.server_detail_panel.add_site(server)
+        kill = lambda : self.kill_server(server)
+        start = lambda : self.launch_server(server)
         # Creation d'un formulaire pour un server qui sera placer en x,y du clic
         menu.add_command(label="add liaison", command = liaison)
         menu.add_command(label="add site", command = site)
+        menu.add_command(label="kill", command = kill)
+        menu.add_command(label="start", command = start)
+
         return menu
     def pop_server_menu(self,x,y,server):
         if self.server_menu != None:
             self.server_menu.destroy()
         self.server_menu = self.create_server_menu(server)
         self.server_menu.post(x,y)
+        self.unpop_menu()
+    def kill_server(self,server):
+        server.shutdown()
+        self.refresh_graphs()
+    def launch_server(self,server):
+        server.start()
+        self.refresh_graphs()
 
