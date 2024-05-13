@@ -60,20 +60,58 @@ class ServerPath():
             parent = parent.parent
         self.servers_suite = servers 
 
-    def hilight(self):
+    def hilight(self,color="red"):
         servers = self.servers_suite
         for i in range(len(servers)) :
             server = servers[i]
-            server.get_layout().hilight(color="red")
+            server.get_layout().hilight(color)
             try :
                 liaison = server.get_liaison_with(servers[i+1])
-                liaison.get_layout().hilight()
+                liaison.get_layout().hilight(color)
             except IndexError:
                 pass;
 
 
+def parcour_en_largeur(server_depart:Server,servers:list):
+    check_depart = Checkout(server=server_depart,value=0)
+    checkouts = list()
+    checkouts.append(check_depart)
+    visited = list()
+    visited.append(server_depart)
 
-def find_short_path(server_depart , server_arrivee , servers:list ):
+    file_ = list()
+
+    file_.append(server_depart)
+    while len(file_) > 0:
+        curr = list()
+        for v in file_:
+            check_v = Checkout.get_checkout_of(v,checkouts)
+            for liaison in v.get_lisaisons():
+                if not liaison.get_etat() :
+                    continue
+                u = liaison.get_server_lier(v)
+                if u not in visited :
+                    visited.append(u)
+                    value = check_v.value + 1
+                    check_voisin = Checkout(server=u,parent=check_v,value=value)
+                    curr.append(u)
+                    checkouts.append(check_voisin)
+        for vis in visited:
+            try :
+                file_.remove(vis)
+            except Exception:
+                pass
+        for value in curr:
+            file_.append(value)
+    return checkouts
+            
+def find_path_en_largeur(server_depart:Server , server_arrivee , servers:list ):
+    checkouts = parcour_en_largeur(server_depart,servers)
+    check_arrive = Checkout.get_checkout_of(server_arrivee,checkouts)
+    return ServerPath(check_arrive)
+
+
+def find_short_path(server_depart:Server , server_arrivee , servers:list ):
     # La liste des checkouts pour 
     checkouts = list()
     # Initalisation des checkouts pour chaque server
@@ -130,7 +168,7 @@ def checkout_traitement(source_checkout,temp_sources:set,checkouts):
         # Mais faire le traitement si elle n'est pas encore tratiee
         if not checkout_voisin.is_finished():
             # Calculer la valeur de test ; value = valeur du parent + le temps de response de la liaison
-            value = source_checkout.value + liaison.get_temps_reponse()
+            value = source_checkout.value + int(liaison.get_temps_reponse())
             # Test de changement de valeur
             # la valeur None est considere comme infinie
             if (checkout_voisin.value == None) or (checkout_voisin.value > value):

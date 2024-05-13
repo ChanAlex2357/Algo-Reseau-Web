@@ -23,6 +23,9 @@ class ServerLayout(GraphLayout):
         self.move_events()
 
     def set_layout_id(self,server,x,y):
+        color = "cyan";
+        if not server.get_etat:
+            color = "gray"
         geom = self.canevas.create_rectangle(
             x,
             y,

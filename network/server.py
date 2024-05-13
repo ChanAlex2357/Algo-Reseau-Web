@@ -19,6 +19,10 @@ class Server():
 		self.set_etat(etat);
 		self.set_dns(dns);
 		self.layout = None
+
+		self.parent = None
+		self.visited = False
+		self.algo_value = None
 	def __str__(self):
 		return self.stringify()
 #Getteurs and Setteurs
